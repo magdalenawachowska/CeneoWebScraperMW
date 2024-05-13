@@ -1,6 +1,7 @@
 
 from app import app
-from flask import render_template
+import requests
+from flask import render_template, request, redirect, url_for
 
 @app.route('/')                  #sciezki - wywolana zostanie funkcja ponizej
 def index():
@@ -9,8 +10,15 @@ def index():
 #zeby uruchomic flaska w trybie debugowanie mamy:
 #flask run --debug
 
-@app.route('/extract')                 
+@app.route('/extract', methods=['POST', 'GET'])                 
 def extract():
+    if request.method == "POST":
+        product_id = request.form.get("product_id")     #takie samo jak name !! 
+        url =f"https://www.ceneo.pl/{product_id}"
+        response = requests.get(url)
+        if response.status_code == requests.codes["ok"]:
+            #proces ekstrakcji
+            return redirect(url_for('product', product_id= product_id))              #trzeba jeszcze dopisać czy istnieja opinie!! przemysl
     return render_template("extract.html.jinja")
 
 @app.route('/products')                 
@@ -22,5 +30,5 @@ def author():
     return render_template("author.html.jinja")
 
 @app.route('/product/<product_id>')
-def product_id(product_id):
-    return render_template("product_id.html.jinga", product_id= product_id)
+def product(product_id):
+    return render_template("product.html.jinja", product_id= product_id)
