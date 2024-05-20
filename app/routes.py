@@ -53,7 +53,7 @@ def extract():
                         json.dump(all_opinions, jf, indent=4, ensure_ascii=False)
                     opinions = pd.DataFrame.from_dict(all_opinions)
 
-            #proces ekstrakcji
+                #proces ekstrakcji
                 return redirect(url_for('product', product_id= product_id))            
             return render_template("extract.html.jinja", error="Dla produktu o podanym kodzie nie ma opinii")
         return render_template("extract.html.jinja", error="Produkt o podanym kodzie nie istnieje")
